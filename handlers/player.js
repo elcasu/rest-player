@@ -1,7 +1,9 @@
 const express = require('express')
 const { ErrorHandler } = require('../middlewares')
 const Video = require('../models/video')
-var Omx = require('node-omxplayer')
+const Omx = require('node-omxplayer')
+
+let player
  
 module.exports = class PlayerController {
   constructor (app) {
@@ -13,6 +15,9 @@ module.exports = class PlayerController {
     // play video
     router.post('/:id/play', ErrorHandler(this.startVideo))
 
+    // Controls
+    router.post('/:id/ff', ErrorHandler(this.fastForward))
+
     app.use('/api/videos', router)
   }
 
@@ -22,9 +27,14 @@ module.exports = class PlayerController {
 
   async startVideo (req, res) {
     const video = await Video.findById(req.params.id)
-    const player = Omx(video.path, 'hdmi', false, 100)
+    player = Omx(video.path, 'hdmi', false, 100)
     // player.openFile(video.path)
     // player.play()
     res.send({ message: `Playing ${video.name}` })
+  }
+
+  async fastForward (req, res) {
+    player.fastFwd()
+    res.send({ message: `FF ${video.name}` })
   }
 }
