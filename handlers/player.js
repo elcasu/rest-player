@@ -17,7 +17,7 @@ module.exports = class PlayerController {
 
     // Controls
     router.post('/:id/fwd', ErrorHandler(this.fwd))
-    router.post('/:id/stop', ErrorHandler(this.fwd))
+    router.post('/:id/stop', ErrorHandler(this.stop))
 
     app.use('/api/videos', router)
   }
