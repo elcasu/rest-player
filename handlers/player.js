@@ -22,7 +22,7 @@ module.exports = class PlayerController {
 
   async startVideo (req, res) {
     const video = await Video.findById(req.params.id)
-    const player = Omx(video.path)
+    const player = Omx(video.path, 'hdmi', false, 100)
     // player.openFile(video.path)
     // player.play()
     res.send({ message: `Playing ${video.name}` })
