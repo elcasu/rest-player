@@ -16,7 +16,7 @@ module.exports = class PlayerController {
     router.post('/:id/play', ErrorHandler(this.startVideo))
 
     // Controls
-    router.post('/:id/ff', ErrorHandler(this.fastForward))
+    router.post('/:id/fwd', ErrorHandler(this.fwd))
 
     app.use('/api/videos', router)
   }
@@ -33,8 +33,8 @@ module.exports = class PlayerController {
     res.send({ message: `Playing ${video.name}` })
   }
 
-  async fastForward (req, res) {
-    player.fastFwd()
-    res.send({ message: `FF ${video.name}` })
+  async fwd (req, res) {
+    player.fwd30()
+    res.send({ message: `Fwd 30 sec ${video.name}` })
   }
 }
