@@ -17,6 +17,7 @@ module.exports = class PlayerController {
 
     // Controls
     router.post('/:id/fwd', ErrorHandler(this.fwd))
+    router.post('/:id/stop', ErrorHandler(this.fwd))
 
     app.use('/api/videos', router)
   }
@@ -36,5 +37,10 @@ module.exports = class PlayerController {
   async fwd (req, res) {
     player.fwd30()
     res.send({ message: `Fwd 30 sec ${video.name}` })
+  }
+
+  async stop (req, res) {
+    player.stop()
+    res.send({ message: `${video.name} stopped` })
   }
 }
