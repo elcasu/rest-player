@@ -42,7 +42,7 @@ module.exports = class PlayerController {
 
   async stop (req, res) {
     const video = await Video.findById(req.params.id)
-    player.stop()
+    player.quit()
     res.send({ message: `${video.name} stopped` })
   }
 }
