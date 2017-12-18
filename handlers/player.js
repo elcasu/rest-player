@@ -35,11 +35,13 @@ module.exports = class PlayerController {
   }
 
   async fwd (req, res) {
+    const video = await Video.findById(req.params.id)
     player.fwd30()
     res.send({ message: `Fwd 30 sec ${video.name}` })
   }
 
   async stop (req, res) {
+    const video = await Video.findById(req.params.id)
     player.stop()
     res.send({ message: `${video.name} stopped` })
   }
