@@ -9,7 +9,8 @@
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "mongoose": "^4.13.6",
-    "mplayer": "^2.1.0"
+    "mplayer": "^2.1.0",
+    "node-omxplayer": "^0.6.1"
   },
   "devDependencies": {},
   "scripts": {

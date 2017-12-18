@@ -1,10 +1,8 @@
 const express = require('express')
 const { ErrorHandler } = require('../middlewares')
 const Video = require('../models/video')
-const MPlayer = require('mplayer')
+var Omx = require('node-omxplayer')
  
-const player = new MPlayer()
-
 module.exports = class PlayerController {
   constructor (app) {
     const router = express.Router()
@@ -24,8 +22,9 @@ module.exports = class PlayerController {
 
   async startVideo (req, res) {
     const video = await Video.findById(req.params.id)
-    player.openFile(video.path)
-    player.play()
+    const player = Omx(video.path)
+    // player.openFile(video.path)
+    // player.play()
     res.send({ message: `Playing ${video.name}` })
   }
 }
