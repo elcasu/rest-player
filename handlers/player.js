@@ -21,7 +21,7 @@ module.exports = class PlayerController {
     // Controls
     router.post('/:id/back', ErrorHandler(this.back))
     router.post('/:id/fwd', ErrorHandler(this.fwd))
-    router.post('/:id/stop', ErrorHandler(this.stop))
+    router.post('/stop', ErrorHandler(this.stop))
     router.post('/:id/volUp', ErrorHandler(this.volUp))
     router.post('/:id/volDown', ErrorHandler(this.volDown))
 
@@ -54,9 +54,8 @@ module.exports = class PlayerController {
   }
 
   async stop (req, res) {
-    const video = await Video.findById(req.params.id)
     player.quit()
-    res.send({ message: `${video.name} stopped` })
+    res.send({ message: `video stopped` })
   }
 
   async volUp (req, res) {
