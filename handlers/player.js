@@ -54,7 +54,9 @@ module.exports = class PlayerController {
   }
 
   async stop (req, res) {
-    player.quit()
+    if (player && player.running) {
+      player.quit()
+    }
     res.send({ message: `video stopped` })
   }
 
