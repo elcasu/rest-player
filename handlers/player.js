@@ -73,7 +73,7 @@ module.exports = class PlayerController {
   }
 
   async info (req, res) {
-    if (!player) {
+    if (!player || !player.running) {
       return res.send({ message: 'player is not running' })
     }
     const info = player.info()
