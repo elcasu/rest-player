@@ -77,6 +77,7 @@ module.exports = class PlayerController {
       return res.send({ message: 'player is not running' })
     }
     const info = player.info()
+    console.log('INFO ---->>> ', info)
     res.send({ message: `player information`, info })
   }
 }
