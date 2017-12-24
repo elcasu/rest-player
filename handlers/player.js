@@ -73,6 +73,9 @@ module.exports = class PlayerController {
   }
 
   async info (req, res) {
+    if (!player) {
+      return res.send({ message: 'player is not running' })
+    }
     const info = player.info()
     res.send({ message: `player information`, info })
   }
