@@ -13,7 +13,7 @@ module.exports = class PlayerController {
     router.get('/', ErrorHandler(this.getList))
 
     // get video info
-    router.get('/:id', ErrorHandler(this.info))
+    router.get('/info', ErrorHandler(this.info))
 
     // play video
     router.post('/:id/play', ErrorHandler(this.startVideo))
@@ -73,8 +73,7 @@ module.exports = class PlayerController {
   }
 
   async info (req, res) {
-    const video = await Video.findById(req.params.id)
     const info = player.info()
-    res.send({ message: `${video.name} - video information`, info })
+    res.send({ message: `player information`, info })
   }
 }
