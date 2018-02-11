@@ -6,7 +6,16 @@ const app = express()
 const bodyParser = require('body-parser')
 const path = require('path')
 const handlers = require('./handlers')
+const socketio = require('socket.io')
+const http = require('http')
+const server = http.Server(app)
+const websocket = socketio(server, { pingTimeout: 30000 })
+const Omx = require('node-omxplayer')
 
+app.use((req, res, next) => {
+  req.socket = websocket
+  next()
+})
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -20,9 +29,13 @@ if (!mongoose.connection.readyState) {
 handlers(app)
 
 const port = process.env.PORT || 7000
-app.listen(port, () => {
+server.listen(port, () => {
   if (process.env.NODE_ENV !== 'test'){
     //eslint-disable-next-line no-console
     console.log("Server running on port " + port);
   }
+})
+
+websocket.on('connection', socket => {
+  console.log('Hola dispositivo! :-)')
 })

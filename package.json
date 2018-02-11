@@ -10,7 +10,8 @@
     "express": "^4.16.2",
     "mongoose": "^4.13.6",
     "mplayer": "^2.1.0",
-    "node-omxplayer": "^0.6.1"
+    "node-omxplayer": "^0.6.1",
+    "socket.io": "^2.0.4"
   },
   "devDependencies": {},
   "scripts": {
