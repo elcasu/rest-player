@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Video = require('./video')
 
 mongoose.Promise = global.Promise
 
@@ -10,20 +11,28 @@ const StateSchema = new mongoose.Schema({
 StateSchema.loadClass(
   class StateClass {
     static async get() {
-      const res = await this.aggregate([
-        {
-          $lookup: {
-            from: 'videos',
-            localField: 'videoId',
-            foreignField: '_id',
-            as: 'video'
-          },
-        },
-        {
-          $unwind: { path: '$video' }
-        }
-      ])
-      return res[0]
+      // TODO: usar esta forma cuando consigamos meter
+      // mongod 3.4 en el server!
+      //
+      // const res = await this.aggregate([
+      //   {
+      //     $lookup: {
+      //       from: 'videos',
+      //       localField: 'videoId',
+      //       foreignField: '_id',
+      //       as: 'video'
+      //     },
+      //   },
+      //   {
+      //     $unwind: { path: '$video' }
+      //   }
+      // ])
+      const res = await this.findOne({})
+      if (res && res.videoId) {
+        const video = await Video.findOne({ _id: res.videoId })
+        res.video = video
+      }
+      return res
     }
 
     static async set(video, status) {
