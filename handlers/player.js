@@ -2,7 +2,7 @@ const express = require('express')
 const { ErrorHandler } = require('../middlewares')
 const Video = require('../models/video')
 const State = require('../models/state')
-const playerManager = require('./helpers/playerManager')
+const playerManager = require('../helpers/playerManager')
 
 let player
  
