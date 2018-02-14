@@ -1,8 +1,8 @@
 const express = require('express')
-const Omx = require('node-omxplayer')
 const { ErrorHandler } = require('../middlewares')
 const Video = require('../models/video')
 const State = require('../models/state')
+const playerManager = require('./helpers/playerManager')
 
 let player
  
@@ -28,12 +28,6 @@ module.exports = class PlayerController {
 
     app.use('/api/videos', router)
 
-
-    if (player) {
-      player.on('close', async () => {
-        await State.stop()
-      })
-    }
   }
 
   async getList (req, res) {
@@ -46,11 +40,8 @@ module.exports = class PlayerController {
 
   async startVideo (req, res) {
     const video = await Video.findById(req.params.id)
-    if (player && player.running) {
-      player.quit()
-    }
-    player = Omx(video.path, 'hdmi', false, 100)
-    await State.set(video, 'PLAYING')
+    // player = Omx(video.path, 'hdmi', false, 100)
+    await playerManager.start(video)
     req.socket.emit('player',  {
       action: 'actions:video_started',
       message: await State.get()
@@ -71,11 +62,8 @@ module.exports = class PlayerController {
   }
 
   async stop (req, res) {
-    if (player && player.running) {
-      player.quit()
-    }
-    await State.stop()
-    res.send({ message: `video stopped` })
+    await playerManager.stop()
+    res.send({ message: 'video stopped' })
   }
 
   async volUp (req, res) {
@@ -95,6 +83,6 @@ module.exports = class PlayerController {
       return res.send({ message: 'player is not running' })
     }
     const info = player.info()
-    res.send({ message: `player information`, info })
+    res.send({ message: info })
   }
 }

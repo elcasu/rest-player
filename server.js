@@ -10,7 +10,8 @@ const socketio = require('socket.io')
 const http = require('http')
 const server = http.Server(app)
 const websocket = socketio(server, { pingTimeout: 30000 })
-const Omx = require('node-omxplayer')
+const playerManager = require('./helpers/playerManager')
+const State = require('./models/state')
 
 app.use((req, res, next) => {
   req.socket = websocket
@@ -19,7 +20,7 @@ app.use((req, res, next) => {
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname, "/public")))
+app.use(express.static(path.join(__dirname, '/public')))
 
 if (!mongoose.connection.readyState) {
   mongoose.connect(process.env.DATABASE_NAME, { useMongoClient: true })
@@ -32,10 +33,17 @@ const port = process.env.PORT || 7000
 server.listen(port, () => {
   if (process.env.NODE_ENV !== 'test'){
     //eslint-disable-next-line no-console
-    console.log("Server running on port " + port);
+    console.log('Server running on port ' + port)
   }
 })
 
-websocket.on('connection', socket => {
+websocket.on('connection', () => {
+  //eslint-disable-next-line no-console
   console.log('Hola dispositivo! :-)')
 })
+
+if (playerManager.player) {
+  playerManager.player.on('close', async () => {
+    await State.stop()
+  })
+}
