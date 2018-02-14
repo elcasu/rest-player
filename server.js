@@ -10,8 +10,6 @@ const socketio = require('socket.io')
 const http = require('http')
 const server = http.Server(app)
 const websocket = socketio(server, { pingTimeout: 30000 })
-const playerManager = require('./helpers/playerManager')
-const State = require('./models/state')
 
 app.use((req, res, next) => {
   req.socket = websocket
@@ -41,9 +39,3 @@ websocket.on('connection', () => {
   //eslint-disable-next-line no-console
   console.log('Hola dispositivo! :-)')
 })
-
-if (playerManager.player) {
-  playerManager.player.on('close', async () => {
-    await State.stop()
-  })
-}
