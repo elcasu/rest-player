@@ -28,6 +28,7 @@ StateSchema.loadClass(
       //   }
       // ])
       const res = await this.findOne({})
+      console.log('RES ------------>>> ', res)
       if (res && res.videoId) {
         const video = await Video.findOne({ _id: res.videoId })
         res.video = video
