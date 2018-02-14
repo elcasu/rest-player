@@ -41,11 +41,7 @@ module.exports = class PlayerController {
   async startVideo (req, res) {
     const video = await Video.findById(req.params.id)
     // player = Omx(video.path, 'hdmi', false, 100)
-    await playerManager.start(video)
-    req.socket.emit('player',  {
-      action: 'actions:video_started',
-      message: await State.get()
-    })
+    await playerManager.start(video, req.socket)
     res.send({ message: `Playing ${video.name}` })
   }
 
