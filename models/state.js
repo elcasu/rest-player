@@ -5,6 +5,7 @@ mongoose.Promise = global.Promise
 
 const StateSchema = new mongoose.Schema({
   videoId: { type: mongoose.Schema.Types.ObjectId, ref: 'Video' },
+  video: { type: Object },
   status: String
 })
 
@@ -28,7 +29,6 @@ StateSchema.loadClass(
       //   }
       // ])
       const res = await this.findOne({})
-      console.log('RES ------------>>> ', res)
       if (res && res.videoId) {
         const video = await Video.findOne({ _id: res.videoId })
         res.video = video
