@@ -12,22 +12,6 @@ const StateSchema = new mongoose.Schema({
 StateSchema.loadClass(
   class StateClass {
     static async get() {
-      // TODO: usar esta forma cuando consigamos meter
-      // mongod 3.4 en el server!
-      //
-      // const res = await this.aggregate([
-      //   {
-      //     $lookup: {
-      //       from: 'videos',
-      //       localField: 'videoId',
-      //       foreignField: '_id',
-      //       as: 'video'
-      //     },
-      //   },
-      //   {
-      //     $unwind: { path: '$video' }
-      //   }
-      // ])
       const res = await this.findOne({})
       if (res && res.videoId) {
         const video = await Video.findOne({ _id: res.videoId })
@@ -51,7 +35,7 @@ StateSchema.loadClass(
       if (!state) return
       state.status = 'STOPPED'
       state.videoId = undefined
-      state.save()
+      return state.save()
     }
   }
 )
