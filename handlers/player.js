@@ -40,7 +40,6 @@ module.exports = class PlayerController {
 
   async startVideo (req, res) {
     const video = await Video.findById(req.params.id)
-    // player = Omx(video.path, 'hdmi', false, 100)
     await playerManager.start(video, req.socket)
     res.send({ message: `Playing ${video.name}` })
   }
@@ -58,7 +57,7 @@ module.exports = class PlayerController {
   }
 
   async stop (req, res) {
-    await playerManager.stop()
+    await playerManager.stop(req.socket)
     res.send({ message: 'video stopped' })
   }
 

@@ -10,6 +10,7 @@ const socketio = require('socket.io')
 const http = require('http')
 const server = http.Server(app)
 const websocket = socketio(server, { pingTimeout: 30000 })
+const State = require('./models/state')
 
 app.use((req, res, next) => {
   req.socket = websocket
@@ -35,7 +36,11 @@ server.listen(port, () => {
   }
 })
 
-websocket.on('connection', () => {
+websocket.on('connection', async (socket) => {
   //eslint-disable-next-line no-console
   console.log('Hola dispositivo! :-)')
+  const newState = await State.get()
+  socket.emit('player',  {
+    state: newState
+  })
 })

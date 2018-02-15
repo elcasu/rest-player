@@ -11,24 +11,23 @@ module.exports = {
     this.player.on('close', async () => {
       await State.stop()
       const newState = await State.get()
-      console.log('[STOP] - state: ', newState)
       socket.emit('player',  {
-        action: 'actions:video_stopped',
-        message: newState
+        state: newState
       })
     })
     await State.set(video, 'PLAYING')
     const newState = await State.get()
-    console.log('[PLAY] - state: ', newState)
     socket.emit('player',  {
-      action: 'actions:video_started',
-      message: newState
+      state: newState
     })
   },
-  stop: async () => {
+  stop: async socket => {
     if (this.player && this.player.running) {
       this.player.quit()
     }
-    await State.stop()
+    const newState = await State.stop()
+    socket.emit('player',  {
+      state: newState
+    })
   }
 }
