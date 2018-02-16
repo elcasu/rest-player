@@ -5,7 +5,6 @@ module.exports = {
   player: null,
   start: async (video, socket) => {
     if (this.player && this.player.running) {
-      // this.player.quit()
       this.player.newSource(video.path, 'hdmi', false, 100)
     }
     else {
@@ -32,5 +31,11 @@ module.exports = {
     socket.emit('player',  {
       state: newState
     })
+  },
+  volUp: () => {
+    this.player.volUp()
+  },
+  volDown: () => {
+    this.player.volDown()
   }
 }

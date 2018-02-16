@@ -63,13 +63,13 @@ module.exports = class PlayerController {
 
   async volUp (req, res) {
     const video = await Video.findById(req.params.id)
-    player.volUp()
+    playerManager.volUp()
     res.send({ message: `${video.name} - volume up` })
   }
 
   async volDown (req, res) {
     const video = await Video.findById(req.params.id)
-    player.volDown()
+    playerManager.volDown()
     res.send({ message: `${video.name} - volume down` })
   }
 
