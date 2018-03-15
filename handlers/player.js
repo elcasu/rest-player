@@ -13,6 +13,9 @@ module.exports = class PlayerController {
     // get video list
     router.get('/', ErrorHandler(this.getList))
 
+    // get video
+    router.get('/:id', ErrorHandler(this.getVideo))
+
     // get video info
     router.get('/info', ErrorHandler(this.info))
 
@@ -36,6 +39,11 @@ module.exports = class PlayerController {
       videos,
       state: await State.get()
     })
+  }
+
+  async getVideo (req, res) {
+    const video = await Video.findById(req.params.id)
+    res.send(video)
   }
 
   async startVideo (req, res) {
