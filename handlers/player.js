@@ -1,10 +1,13 @@
 const express = require('express')
+const multer = require('multer')
 const { ErrorHandler } = require('../middlewares')
 const Video = require('../models/video')
 const State = require('../models/state')
 const playerManager = require('../helpers/playerManager')
 
 let player
+
+const upload = multer({ dest: 'uploads/' })
  
 module.exports = class PlayerController {
   constructor (app) {
@@ -15,6 +18,9 @@ module.exports = class PlayerController {
 
     // get video
     router.get('/:id', ErrorHandler(this.getVideo))
+
+    // update video
+    router.put('/:id', upload.single('image'), ErrorHandler(this.updateVideo))
 
     // get video info
     router.get('/info', ErrorHandler(this.info))
@@ -43,6 +49,16 @@ module.exports = class PlayerController {
 
   async getVideo (req, res) {
     const video = await Video.findById(req.params.id)
+    res.send(video)
+  }
+
+  async updateVideo (req, res) {
+    const video = await Video.findById(req.params.id)
+    video.image = {}
+    video.image.name = req.files[0].name
+    video.image.path = req.files[0].path
+    video.name = req.body.name
+    await video.save()
     res.send(video)
   }
 
