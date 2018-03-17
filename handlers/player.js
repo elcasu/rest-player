@@ -56,7 +56,7 @@ module.exports = class PlayerController {
     const video = await Video.findById(req.params.id)
     if (req.file) {
       video.image = {}
-      video.image.name = req.file.filename
+      video.image.name = req.file.originalname
       video.image.path = req.file.path
     }
     video.name = req.body.name
