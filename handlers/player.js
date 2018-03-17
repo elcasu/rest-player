@@ -54,9 +54,11 @@ module.exports = class PlayerController {
 
   async updateVideo (req, res) {
     const video = await Video.findById(req.params.id)
-    video.image = {}
-    video.image.name = req.files[0].name
-    video.image.path = req.files[0].path
+    if (req.files && req.files.length) {
+      video.image = {}
+      video.image.name = req.files[0].name
+      video.image.path = req.files[0].path
+    }
     video.name = req.body.name
     await video.save()
     res.send(video)
