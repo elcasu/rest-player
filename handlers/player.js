@@ -1,13 +1,16 @@
+const fs = require('fs')
 const express = require('express')
 const multer = require('multer')
 const { ErrorHandler } = require('../middlewares')
 const Video = require('../models/video')
 const State = require('../models/state')
 const playerManager = require('../helpers/playerManager')
+const { generateError } = require('../helpers/errors')
 
 let player
 
-const upload = multer({ dest: 'public/img/' })
+const upload = multer({ dest: '/tmp' })
+const imageDir = 'public/img'
  
 module.exports = class PlayerController {
   constructor (app) {
@@ -54,7 +57,12 @@ module.exports = class PlayerController {
 
   async updateVideo (req, res) {
     const video = await Video.findById(req.params.id)
+    if (!video) {
+      throw generateError(404, 'Video not found')
+    }
     if (req.file) {
+      // copy image from tmp dir
+      fs.createReadStream(req.file.path).pipe(fs.createWriteStream(`${imageDir}/${video._id}`))
       video.image = {}
       video.image.name = req.file.originalname
       video.image.path = req.file.path
