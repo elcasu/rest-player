@@ -7,7 +7,7 @@ const playerManager = require('../helpers/playerManager')
 
 let player
 
-const upload = multer({ dest: 'uploads/' })
+const upload = multer({ dest: 'public/img/' })
  
 module.exports = class PlayerController {
   constructor (app) {
