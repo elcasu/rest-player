@@ -7,7 +7,8 @@ const VideoSchema = new mongoose.Schema({
   path: { type: String, required: 'video path is required' },
   image: {
     name: String,
-    path: String
+    path: String,
+    url: String
   }
 })
 

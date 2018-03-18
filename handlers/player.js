@@ -10,7 +10,7 @@ const { generateError } = require('../helpers/errors')
 let player
 
 const upload = multer({ dest: '/tmp' })
-const imageDir = 'public/img'
+const imageDir = 'img'
  
 module.exports = class PlayerController {
   constructor (app) {
@@ -62,10 +62,12 @@ module.exports = class PlayerController {
     }
     if (req.file) {
       // copy image from tmp dir
-      fs.createReadStream(req.file.path).pipe(fs.createWriteStream(`${imageDir}/${video._id}`))
+      const filePath = `${imageDir}/${video._id}`
+      fs.createReadStream(req.file.path).pipe(fs.createWriteStream(`public/${filePath}`))
       video.image = {}
       video.image.name = req.file.originalname
       video.image.path = req.file.path
+      video.image.url = `${req.get('host')}/${filePath}`
     }
     video.name = req.body.name
     await video.save()
