@@ -67,7 +67,7 @@ module.exports = class PlayerController {
       video.image = {}
       video.image.name = req.file.originalname
       video.image.path = req.file.path
-      video.image.url = `${req.get('host')}/${filePath}`
+      video.image.url = `http://${req.get('host')}/${filePath}`
     }
     video.name = req.body.name
     await video.save()
