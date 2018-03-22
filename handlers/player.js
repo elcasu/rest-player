@@ -6,6 +6,7 @@ const Video = require('../models/video')
 const State = require('../models/state')
 const playerManager = require('../helpers/playerManager')
 const { generateError } = require('../helpers/errors')
+const axios = require('axios')
 
 let player
 
@@ -15,6 +16,9 @@ const imageDir = 'img'
 module.exports = class PlayerController {
   constructor (app) {
     const router = express.Router()
+
+    // get title information
+    router.get('/title-info', ErrorHandler(this.getTitleInfo))
 
     // get video list
     router.get('/', ErrorHandler(this.getList))
@@ -70,8 +74,15 @@ module.exports = class PlayerController {
       video.image.url = `http://${req.get('host')}/${filePath}`
     }
     video.name = req.body.name
+    video.description = req.body.description
     await video.save()
     res.send(video)
+  }
+
+  async getTitleInfo (req, res) {
+    const title = req.query.title
+    const response = await axios.get(`https://www.omdbapi.com/?t=${title}&apikey=6773598c`)
+    res.send(response.data)
   }
 
   async startVideo (req, res) {
